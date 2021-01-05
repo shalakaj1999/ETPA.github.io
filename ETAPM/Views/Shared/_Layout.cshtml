@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>@ViewBag.Title - ETA PROJECT MANAGER</title>
+
+    <!-- Fonts-->
+    <link href="~/Fonts/GoogleRoboto/css/roboto.all.css" rel="stylesheet" />
+
+    <!-- Icon Fonts-->
+    <link href="~/Fonts/FontAwesome/css/fontawesome.all.min.css" rel="stylesheet" />
+
+    <!-- CSS -->
+    <link href="~/Content/CSS/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/wisdomls-dashboard.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <div id="site-navbar" class="d-none d-md-block bg-white">
+
+        <a class="navbar-brand pt-0 text-blue-app mt-2" href="#" style="padding: .65rem 1.6rem;">
+            <i class="fas fa-layer-group"></i><span class="d-none d-sm-inline-block" style="font-size:16px"><b style="padding-left:0.8rem;">ETAPM</b> <span>Dashboard</span></span>
+        </a>
+
+        <ul class="navbar-nav mt-3">
+            <li class="nav-item active">
+                <a class="nav-link" href="@Url.Action("","Dashboard")"><i class="fas fa-desktop nav-icon text-blue-app"></i>  Dashboard</a>
+            </li>
+            @if (User.IsInRole("System Administrator"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("", "Employees")"><i class="fas fa-users nav-icon text-purple"></i>  Employees</a>
+                </li>
+            }
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("","ExtraTimeRequests")"><i class="fas fa-stopwatch nav-icon text-purple"></i>  Extra time requests</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("","Tasks")"><i class="fas fa-code-branch nav-icon text-purple"></i>  Tasks</a>
+            </li>
+
+        </ul>
+
+        <h6 class="navbar-heading text-muted mt-2"> ACCOUNT</h6>
+        <ul class="navbar-nav mt-0">
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("MyProfile","Account")"><i class="fas fa-user-circle nav-icon text-purple"></i>  My Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Logout","Account")"><i class="fas fa-running nav-icon text-dark"></i>  Logout</a>
+            </li>
+        </ul>
+
+    </div>
+
+    <div id="main-content">
+        <!-- Mobile Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between d-md-none">
+            <div class="container">
+                <div>
+                    <button class="navbar-toggler border-0 p-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <a class="navbar-brand pl-1" href="#">ETAPM</a>
+                </div>
+
+                <!-- Example split danger button -->
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-light"><i class="fas fa-user"></i></button>
+                    <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#"><i class="fas fa-user nav-icon"></i>My Profile</a>
+                        <a class="dropdown-item" href="#"><i class="fas fa-cog nav-icon"></i>Setting</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#"><i class="fas fa-running nav-icon"></i>Logout</a>
+                    </div>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#"><i class="fas fa-desktop nav-icon text-blue-app"></i>  Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fab fa-slideshare nav-icon text-danger"></i>  Offer banner</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-sitemap nav-icon text-blue-app"></i>  Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-copyright nav-icon text-danger"></i>  Brand</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseProduct" href="#"><i class="fab fa-product-hunt nav-icon text-warning"></i>  Product Manager</a>
+                            <ul id="collapseProduct" class="navbar-nav collapse pl-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"><i class="fas fa-shopping-basket nav-icon text-warning"></i>  Products</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"><i class="fas fa-sort-amount-up-alt nav-icon text-warning"></i>  Specification</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"><i class="fas fa-palette nav-icon text-warning"></i>  Colors</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"><i class="fas fa-copyright nav-icon text-warning"></i>  Product Images</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-users nav-icon text-info"></i>  Customers</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Of Mobile Navbar -->
+        <!-- Desktop Navbar-->
+        <div class="container-fluid pt-3">
+            <div class="d-flex justify-content-between">
+                <div>
+                    @Html.Raw(ViewBag.PageNav)
+                </div>
+                <div>
+                    <!-- Alerts -->
+                    <div class="btn-group btn-group-sm d-none d-md-inline-flex align-self-center">
+                        <button id="btnNotifications" type="button" class="btn btn-light text-warning font-weight-bold"><i class="fas fa-bell"></i></button>
+                        <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div id="ListNotification" class="dropdown-menu dropdown-menu-right">
+                             
+                        </div>
+                    </div>
+
+                    <!-- Accounts -->
+                    <div class="btn-group btn-group-sm d-none d-md-inline-flex align-self-center">
+                        <button type="button" class="btn btn-light"><i class="fas fa-user"></i></button>
+                        <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <strong class="dropdown-header">Hello! @User.Identity.Name</strong>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#"><i class="fas fa-user nav-icon"></i>My Profile</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-cog nav-icon"></i>Setting</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="@Url.Action("Logout","Account")"><i class="fas fa-running nav-icon"></i>Logout</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- End Of Desktop Navbar-->
+        <!-- Container for ToastWindow-->
+        <div id="ToastContainer"></div>
+
+        <main>
+            @RenderBody()
+        </main>
+        <dia id="temp"></dia>
+    </div>
+
+    <!-- JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/popper.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.validate.custom.js"></script>
+    <script src="~/Scripts/wisdomls-dashboard.js"></script>
+
+    @RenderSection("Scripts", false)
+
+
+<script>
+    GetNewNotification();
+    setInterval(GetNewNotification, 1000 * 15);
+
+    function GetNewNotification() { 
+         
+        var btn = $("#btnNotifications");
+        var list = $("#ListNotification");
+
+        $(btn).removeClass("text-warning").html("<i class='fas fa-bell'></i>");
+        $(list).html("");
+
+        $.ajax({
+            type: 'GET',
+            url: "@Url.Action("GetNewNotification","Notifications")",
+            data: {},
+            contentType: false,
+            processData: false,
+            success: function (response) {  
+                var nots = response; 
+
+                if (nots.length == 0)
+                    return;
+
+                $(btn).addClass("text-warning").html("<i class='fas fa-bell'></i> (" + nots.length  + ")");
+
+                $(nots).each(function () {  
+                    var not = "<a class='dropdown-item' href='#'>" + this.Message + "</a>";  
+                    $(list).append(not);
+                });
+            },
+            error: function (jqXHR, exception) { 
+                alert(jqXHR.statusText);
+            }
+
+        });
+         
+    }
+
+</script>
+
+</body>
+</html>
+

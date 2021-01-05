@@ -1,0 +1,62 @@
+﻿body {
+    text-align:center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    background-color: #f8f9fe;
+    color: #525f7f; 
+
+    position:absolute;
+    display:flex;
+    width:100%;
+    height:100%;
+    justify-items:center;
+    align-items:center;
+}
+
+.logo{
+    height:56px;
+    width:56px;
+}
+
+.field-validation-error {
+    font-size: 14px;
+}
+
+.input-validation-error {
+    border: solid 1px #ff0000;
+}
+
+#login-form-container{
+    max-width:360px; 
+}
+
+.txt {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 400; 
+    color: #525f7f;
+}
+
+#Username {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-color:transparent;
+}
+
+#Password {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.text-blue-app {
+    color: #5e72e4 !important;
+}
+
+.text-purple {
+    color: #8965e0 !important;
+}
+
+.bg-white-semi-transparent {
+    background-color: rgba(255, 255, 255, 0.7)
+}

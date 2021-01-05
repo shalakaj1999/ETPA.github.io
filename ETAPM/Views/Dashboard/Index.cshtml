@@ -1,0 +1,127 @@
+﻿@using ETAPM.Models
+@{
+    ViewBag.Title = "Dashboard";
+    ViewBag.PageNav = "<a class='page-nav' href='" + Url.Action("", "Dashboard") + "'>Dashboard</a><i class='page-nav-divider'></i><span class='page-nav-current'>Home</span>";
+
+    Layout = "~/Views/Shared/_layout.cshtml";
+
+}
+
+
+<div class="container-fluid mt-2">
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <div class="card bg-gradient-green">
+                <div class="card-body">
+                    <h5 class="text-uppercase text-black-50">all task</h5>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <label>Total</label>
+                            <div class="display-4">@ViewBag.TotalTask</div>
+                        </div>
+                        <div>
+                            <label>In progress</label>
+                            <div class="display-4">@ViewBag.TotalTaskInProgress</div>
+                        </div>
+                        <div>
+                            <label>Completed</label>
+                            <div class="display-4">@ViewBag.TotalTaskCompleted</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="card bg-gradient-red text-white">
+                <div class="card-body">
+                    <h5 class="text-uppercase text-black-50">task assigned to me</h5>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <label>Total</label>
+                            <div class="display-4">@ViewBag.TaskToMe</div>
+                        </div>
+                        <div>
+                            <label>In progress</label>
+                            <div class="display-4">@ViewBag.TaskInProgressToMe</div>
+                        </div>
+                        <div>
+                            <label>Completed</label>
+                            <div class="display-4">@ViewBag.TaskCompletedToMe</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="card bg-gradient-blue text-white">
+                <div class="card-body">
+                    <h5 class="text-uppercase text-black-50">task assigned by me</h5>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <label>Total</label>
+                            <div class="display-4">@ViewBag.TaskByMe</div>
+                        </div>
+                        <div>
+                            <label>In progress</label>
+                            <div class="display-4">@ViewBag.TaskInProgressByMe</div>
+                        </div>
+                        <div>
+                            <label>Completed</label>
+                            <div class="display-4">@ViewBag.TaskCompletedByMe</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="list-task" class="form-row mt-3">
+
+        @foreach (Task task in ViewBag.TaskList)
+        {
+            <div class="form-group col-md-6">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between mb-0">
+                            <div>
+                                <span class="badge badge-warning">@task.TaskStatus.TaskStatusName</span>
+                                <div class="form-label">@task.Title</div>
+                            </div>
+
+
+                            <div class="dropdown">
+                                <div class="cursor-pointer" data-toggle="dropdown">
+                                    <i class="fas fa-chevron-circle-down"></i>
+                                </div>
+                                <div class="dropdown-menu dropdown-menu-right shadow">
+                                    <a class="dropdown-item" href="@Url.Action("Details","Tasks", new { id=task.TaskId })"><i class="fas fa-info-circle nav-icon text-purple"></i> Details</a>
+                                    <a class="dropdown-item" href="#"><i class="fas fa-percentage nav-icon text-purple"></i> Update progress</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-control-label font-size-12 h-36-px">@task.Description</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group mb-0 col-sm-6">
+                                <label class="form-label">Remaining (Min): @task.RemainingDuration/@task.Duration </label>
+                            </div>
+                            <div class="form-group mb-0 col-sm-6 text-sm-right">
+                                <label class="form-label ">Completed: @task.Progress% </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped" style="width:@task.Progress%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

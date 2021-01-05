@@ -1,0 +1,611 @@
+﻿@using ETAPM.Models
+@model ETAPM.Models.Task
+
+@{
+    ViewBag.Title = "Dashboard";
+    ViewBag.PageNav = "<a class='page-nav' href='" + Url.Action("", "Dashboard") + "'>Dashboard</a><i class='page-nav-divider'></i><span class='page-nav-current'>Details</span>";
+
+    Layout = "~/Views/Shared/_layout.cshtml";
+
+    CreateTask NewTask = new CreateTask
+    {
+        ParentTaskId = Model.TaskId
+    };
+
+    UpdateTaskProgress NewUpdateTaskProgress = new UpdateTaskProgress
+    {
+        TaskId = Model.TaskId
+    };
+
+    CreateExtraTimeRequest NewExtraTimeRequest = new CreateExtraTimeRequest
+    {
+        TaskId = Model.TaskId
+    };
+
+    TaskFile file = new TaskFile
+    {
+        TaskId = Model.TaskId
+    };
+
+    SelectList StartHours = ViewBag.StartHours;
+    SelectList StartMinutes = ViewBag.StartMinutes;
+    SelectList AssignedToAppUserId = ViewBag.AssignedToAppUserId;
+}
+
+    <div class="container-fluid">
+
+        <div class="display-4">Manage Task</div>
+
+        <div>
+            <span id="lblTaskStatus1" class="badge badge-warning">@Model.TaskStatus.TaskStatusName</span>
+            <div class="form-label mb-0">@Model.Title</div>
+            <div class="font-size-12 font-italic text-info">Assign On: @Model.CreatedOn.ToString("dd MMM yy HH:mm")</div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group mb-0 col-sm-6">
+                <label class="form-label">Remaining (Min): @Model.RemainingDuration/@Model.Duration </label>
+            </div>
+            <div class="form-group mb-0 col-sm-6 text-sm-right">
+                <label class="form-label ">Completed: <span id="lblProgress1">@Model.Progress</span>% </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="progress">
+                <div id="current-progress-bar" class="progress-bar progress-bar-striped" style="width:@Model.Progress%"></div>
+            </div>
+        </div>
+
+        <div class="form-row mt-3">
+            <div class="form-group col-md-4">
+                @using (Html.BeginForm("UpdateTaskProgress", "Tasks", FormMethod.Post, new { id = "UpdateTaskProgress", onSubmit = "return UpdateTaskProgress(this);" }))
+                {
+                    @Html.HiddenFor(progress => NewUpdateTaskProgress.TaskId)
+
+                    <label class="form-label text-uppercase text-info">update progress</label>
+                    <div class="form-group">
+                        <label class="form-label">New progress (In Percent)</label>
+                        <div class="input-group">
+                            @Html.TextBoxFor(progress => NewUpdateTaskProgress.Progress, new { @class = "form-control  border-right-0", placeholder = "eg. 73" })
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-white">%</span>
+                                <button id="btnUpdateProgress" type="submit" class="input-group-text btn-warning">
+                                    <i class="fas fa-check nav-icon"></i> UPDATE
+                                </button>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(progress => NewUpdateTaskProgress.Progress, "", new { @class = "text-danger" })
+                    </div>
+                    <div id="form-msg-container-update-task-progress"></div>
+
+                }
+            </div>
+            <div class="form-group col-md-1">
+
+            </div>
+            <div class="form-group col-md-7">
+                @using (Html.BeginForm("CreateExtraTimeRequest", "Tasks", FormMethod.Post, new { id = "NewExtraTimeRequest", onSubmit = "return NewExtraTimeRequest(this);" }))
+                {
+                    @Html.HiddenFor(request => NewExtraTimeRequest.TaskId)
+
+                    <label class="form-label text-uppercase text-info">ask for extra time</label>
+                    <div class="form-group">
+                        <label class="form-label">Extra time (In Minutes)</label>
+                        <div class="input-group">
+                            @Html.TextBoxFor(request => NewExtraTimeRequest.Duration, new { @class = "form-control  border-right-0", placeholder = "eg. 60 (for 1 hrs)", style = "max-width:70px" })
+                            @Html.TextBoxFor(request => NewExtraTimeRequest.Message, new { @class = "form-control ", placeholder = "Message" })
+                            <div class="input-group-append">
+                                <button id="btnCreateRequest" type="submit" class="input-group-text btn-warning">
+                                    <i class="fas fa-check nav-icon"></i> SEND REQUEST
+                                </button>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(request => NewExtraTimeRequest.Duration, "", new { @class = "text-danger" })
+                    </div>
+                    <div id="form-msg-container-create-request"></div>
+
+                }
+            </div>
+        </div>
+
+
+
+        <div class="form-group mt-3 mb-0">
+            <label class="form-label text-uppercase text-black-50">assigned</label>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label class="form-label">By</label>
+                <div class="form-control-label">
+                    <div class="text-capitalize">@Model.AssignedBy.FirstName @Model.AssignedBy.LastName</div>
+                    <div class="font-size-12 font-italic">@Model.AssignedBy.EmailId</div>
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="form-label">To</label>
+                <div class="form-control-label">
+                    <div class="text-capitalize">@Model.AssignedTo.FirstName @Model.AssignedTo.LastName</div>
+                    <div class="font-size-12 font-italic">@Model.AssignedTo.EmailId</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group mt-3 mb-0">
+            <label class="form-label text-uppercase text-black-50">duration</label>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-sm-6 col-md-3">
+                <label class="form-label">Should be started on</label>
+                <div class="form-control-label">@Model.StartDateTime.ToString("dd MMM yy HH:mm")</div>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+                <label class="form-label">Should be completed on</label>
+                <div class="form-control-label">@Model.EndDateTime.ToString("dd MMM yy HH:mm")</div>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+                <label class="form-label">Assigned duration</label>
+                <div class="form-control-label">@Model.Duration (Minutes)</div>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+                <label class="form-label">Remaining</label>
+                <div class="form-control-label">@Model.RemainingDuration (Minutes)</div>
+            </div>
+        </div>
+
+
+        <div class="form-group mt-3 mt-md-0">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label class="form-label text-uppercase text-black-50">Attachments</label>
+                    </div>
+
+                    @using (Html.BeginForm("CreateFiles", "Tasks", FormMethod.Post, new { id = "FormCreateFiles", enctype = "multipart/form-data", onSubmit = "return FormCreateFiles(this);" }))
+                    {
+                        @Html.HiddenFor(f => file.TaskId)
+
+                        <div class="form-group">
+                            <div class="form-label">
+                                Upload files
+                            </div>
+                            <div>
+                                @Html.TextBoxFor(f => file.PostedFiles, new { @class = "form-control-file", type = "file", @multiple = "multiple" })
+                                @Html.ValidationMessageFor(f => file.PostedFiles, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <button id="btnCreateFiles" type="submit" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-check nav-icon"></i> SAVE
+                        </button>
+                    }
+
+                    <div id="mdl-create-file-msg" class="mt-2">
+
+                    </div> 
+
+                    <table id="files-list" class="table table-sm">
+                        <tbody>  
+                            @foreach (TaskFile f in ViewBag.FilesList)
+                            {
+                                <tr>
+                                    <td>@f.FileName</td>
+                                    <td><a href="@Url.Content("~/DbContents/Tasks/Files/")/@f.FileName" target="_blank">download</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#mdl-create-task"><i class="fas fa-code-branch"></i> ADD SUB TASK</button>
+        </div>
+
+        <div id="list-task" class="form-row mt-3">
+
+            @foreach (Task task in ViewBag.TaskList)
+            {
+                <div class="form-group col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between mb-0">
+                                <div>
+                                    <span class="badge badge-warning">@task.TaskStatus.TaskStatusName</span>
+                                    <div class="form-label">@task.Title</div>
+                                </div>
+
+
+                                <div class="dropdown">
+                                    <div class="cursor-pointer" data-toggle="dropdown">
+                                        <i class="fas fa-chevron-circle-down"></i>
+                                    </div>
+                                    <div class="dropdown-menu dropdown-menu-right shadow">
+                                        <a class="dropdown-item" href="@Url.Action("Details","Tasks", new { id=task.TaskId })"><i class="fas fa-info-circle nav-icon text-purple"></i> Details</a>
+                                        <a class="dropdown-item" href="#"><i class="fas fa-percentage nav-icon text-purple"></i> Update progress</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-control-label font-size-12 h-36-px">@task.Description</div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group mb-0 col-sm-6">
+                                    <label class="form-label">Remaining (Min): @task.RemainingDuration/@task.Duration </label>
+                                </div>
+                                <div class="form-group mb-0 col-sm-6 text-sm-right">
+                                    <label class="form-label ">Completed: @task.Progress% </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped" style="width:@task.Progress%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+
+<div id="mdl-create-task" class="modal fade">
+    <div class="modal-dialog fixed-bottom mr-2" style="z-index:1050">
+        <div class="modal-content">
+            <div class="modal-header pb-1">
+                <h4 class="modal-title text-blue text-uppercase" style="font-weight:500">create new task</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mt-1 pt-0">
+
+                @using (Html.BeginForm("Create", "Tasks", FormMethod.Post, new { id = "CreateTask", onSubmit = "return CreateTask(this);" }))
+                {
+                    @Html.HiddenFor(task => NewTask.ParentTaskId)
+                    <div class="form-group">
+                        <div class="form-label font-italic mb-0">Sub task for:</div>
+                        <div class="form-control-label">@Model.Title</div>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label class="form-label">Estimated start date, time &amp; given duration</label>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-5">
+                            @Html.TextBoxFor(task => NewTask.StartDate, new { @class = "form-control form-control-sm", placeholder = "dd-MMM-yyyy" })
+                            @Html.ValidationMessageFor(task => NewTask.StartDate, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-2">
+                            @Html.DropDownListFor(task => NewTask.StartHours, StartHours, "HH", new { @class = "form-control form-control-sm" })
+                            @Html.ValidationMessageFor(task => NewTask.StartHours, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-2">
+                            @Html.DropDownListFor(task => NewTask.StartMinutes, StartMinutes, "MM", new { @class = "form-control form-control-sm" })
+                            @Html.ValidationMessageFor(task => NewTask.StartMinutes, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-3">
+                            @Html.TextBoxFor(task => NewTask.Duration, new { @class = "form-control form-control-sm", placeholder = "Minutes" })
+                            @Html.ValidationMessageFor(task => NewTask.Duration, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Assign task to</label>
+                        @Html.DropDownListFor(task => NewTask.AssignedToAppUserId, AssignedToAppUserId, "Assigned to", new { @class = "form-control form-control-sm" })
+                        @Html.ValidationMessageFor(task => NewTask.AssignedToAppUserId, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Title</label>
+                        @Html.TextBoxFor(task => NewTask.Title, new { @class = "form-control form-control-sm", placeholder = "Title for task should not be empty." })
+                        @Html.ValidationMessageFor(task => NewTask.Title, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        @Html.TextAreaFor(task => NewTask.Description, new { @class = "form-control form-control-sm", placeholder = "Title for task should not be empty.", style = "height:200px;" })
+                        @Html.ValidationMessageFor(task => NewTask.Description, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <button id="btnCreateTask" type="submit" class="btn btn-sm btn-success">
+                            <i class="fas fa-save nav-icon"></i> SAVE
+                        </button>
+                        <a href="#" class="btn btn-sm btn-secondary" data-dismiss="modal">
+                            <i class="fas fa-times nav-icon"></i> CANCEL
+                        </a>
+                    </div>
+
+                    <div id="form-msg-container-create-task"></div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+
+    $(document).ready(function () {
+
+        $("#NewTask_StartDate").datepicker({
+            changeYear: true,
+            yearRange: "2019:@DateTime.Now.AddYears(10).Year"
+        });
+    })
+
+    $('#mdl-create-task').on('show.bs.modal', function (e) {
+
+        //setTimeout(function () {
+        //    $("#Color_ProductColorName").focus();
+        //}, 1000);
+
+    })
+
+    $('#mdl-create-task').on('hide.bs.modal', function (e) {
+        var form = $("#CreateTask");
+        ResetForm(form);
+        $("#btnCreateTask").html("<i class='fas fa-save nav-icon'></i> SAVE").removeAttr("disabled");
+        $("#form-msg-container-create-task").html("");
+    })
+
+    function CreateTask(form) {
+        $.validator.unobtrusive.parse(form);
+
+        if ($(form).valid()) {
+
+            var btn = $("#btnCreateTask");
+
+            $(btn).html("<i class='fas fa-spinner fa-spin nav-icon'></i> PLEASE WAIT").attr("disabled","disabled");
+
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (response) {
+
+                    $(btn).html("<i class='fas fa-check nav-icon'></i> SAVE").removeAttr("disabled");
+
+                    if (response.status != "ok") {
+                        $("#form-msg-container-create-task").html("<div class='alert alert-danger'><strong>Error:</strong> <br /> " + response.message + "</div>");
+                        return false;
+                    }
+
+                    var data = response.data;
+                    if (data != null) {
+
+                        var item = "<div class='form-group col-md-6'>";
+                        item += "<div class='card'>";
+                        item += "<div class='card-body'>";
+                        item += "<div class='d-flex justify-content-between mb-0'>";
+                        item += "<div>";
+                        item += "<span class='badge badge-warning'>In Progress</span>";
+                        item += "<div class='form-label'>Wisdom Learning & Solution Summer Work</div>";
+                        item += "</div>";
+                        item += "<div class='dropdown'>";
+                        item += "<div class='cursor-pointer' data-toggle='dropdown'>";
+                        item += "<i class='fas fa-chevron-circle-down'></i>";
+                        item += "</div>";
+                        item += "<div class='dropdown-menu dropdown-menu-right shadow'>";
+                        item += "<a class='dropdown-item' href='#'><i class='fab fa-dropbox nav-icon text-purple'></i> Details</a>";
+                        item += "</div>";
+                        item += "</div>";
+                        item += "</div>";
+                        item += "<div class='form-group'>";
+                        item += "<div class='form-control-label font-size-12 h-36-px'>Wisdom Learning & Solution Summer Work : 1) Marketing 2) Learning Software's 3) Python Batches</div>";
+                        item += "</div>";
+                        item += "<div class='form-row'>";
+                        item += "<div class='form-group mb-0 col-md-6'>";
+                        item += "<label class='form-label'>Remaining (Min): 45/60 </label>";
+                        item += "</div>";
+                        item += "<div class='form-group mb-0 col-md-6 text-right'>";
+                        item += "<label class='form-label '>Completed: 75% </label>";
+                        item += "</div>";
+                        item += "</div>";
+                        item += "<div class='form-group'>";
+                        item += "<div class='progress'>";
+                        item += "<div class='progress-bar progress-bar-striped w-75'></div>";
+                        item += "</div>";
+                        item += "</div>";
+                        item += "</div>";
+                        item += "</div>";
+
+
+                        $("#mdl-create-task").modal('hide');
+                        ShowToastMessage("Action", "Task created successfully.", 3000);
+                        $(item).hide().appendTo("#list-task").fadeIn(1000);
+                    }
+
+                },
+                error: function (jqXHR, exception) {
+                    $(btn).html("<i class='fas fa-check nav-icon'></i> SAVE").removeAttr("disabled");
+                    alert(jqXHR.statusText);
+                }
+
+            });
+
+        }
+
+        return false;
+    }
+
+    function UpdateTaskProgress(form) {
+        $.validator.unobtrusive.parse(form);
+
+        if ($(form).valid()) {
+
+            var btn = $("#btnUpdateProgress");
+
+            $(btn).html("<i class='fas fa-spinner fa-spin nav-icon'></i> PLEASE WAIT").attr("disabled","disabled");
+
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (response) {
+
+                    $(btn).html("<i class='fas fa-check nav-icon'></i> UPDATE").removeAttr("disabled");
+
+                    if (response.status != "ok") {
+                        $("#form-msg-container-update-task-progress").html("<div class='alert alert-danger'><strong>Error:</strong> <br /> " + response.message + "</div>");
+                        return false;
+                    }
+
+                    var data = response.data;
+
+                    if (data != null) {
+
+                        var progress = data.Progress;
+                        var status = data.TaskStatus.TaskStatusName;
+                        $("#lblProgress1").html(progress);
+                        $("#lblTaskStatus1").html(status);
+
+                        if (progress < 100) {
+                            $("#current-progress-bar").removeClass("bg-success");
+                            $("#current-progress-bar").attr("style","width:" + progress + "%")
+                        }
+                        else {
+                            $("#current-progress-bar").addClass("bg-success");
+                            $("#current-progress-bar").attr("style","width:" + progress + "%")
+                        }
+                        
+                        ResetForm(form);
+                        ShowToastMessage("Action", "Task progress updated successfully.", 3000); 
+                    }
+
+                },
+                error: function (jqXHR, exception) {
+                    $(btn).html("<i class='fas fa-check nav-icon'></i> UPDATE").removeAttr("disabled");
+                    alert(jqXHR.statusText);
+                }
+
+            });
+
+        }
+
+        return false;
+    }
+
+    function NewExtraTimeRequest(form) {
+        $.validator.unobtrusive.parse(form);
+
+        if ($(form).valid()) {
+
+            var btn = $("#btnCreateRequest");
+
+            $(btn).html("<i class='fas fa-spinner fa-spin nav-icon'></i> PLEASE WAIT").attr("disabled","disabled");
+
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (response) {
+
+                    $(btn).html("<i class='fas fa-check nav-icon'></i> SEND REQUEST").removeAttr("disabled");
+
+                    if (response.status != "ok") {
+                        $("#form-msg-container-create-request").html("<div class='alert alert-danger'><strong>Error:</strong> <br /> " + response.message + "</div>");
+                        return false;
+                    }
+
+                    var data = response.data;
+                    if (data != null) {
+                         
+                        ResetForm(form);
+                        ShowToastMessage("Action", "Request for extra time submited successfully.", 3000); 
+                    }
+
+                },
+                error: function (jqXHR, exception) {
+                    $(btn).html("<i class='fas fa-check nav-icon'></i> SEND REQUEST").removeAttr("disabled");
+                    alert(jqXHR.statusText);
+                }
+
+            });
+
+        }
+
+        return false;
+        }
+
+
+    function FormCreateFiles(form) {
+        $("#mdl-create-file-msg").html("");
+        $.validator.unobtrusive.parse(form);
+
+        if ($(form).valid()) {
+            $("#files-list tbody").html("");
+            var btn = $("#btnCreateFiles");
+            var url = "";
+            $(btn).html("<i class='fas fa-spinner fa-spin nav-icon'></i> PLEASE WAIT").attr("disabled","disabled");
+
+            $.ajax({
+                type: 'POST',
+                url: form.action,
+                data: new FormData(form),
+                contentType: false,
+                processData: false,
+                success: function (response) {
+
+                    $(btn).html("<i class='fas fa-check nav-icon'></i> SAVE").removeAttr("disabled");
+
+                    if (response.status != "ok") {
+                        $("#mdl-create-file-msg").html("<div class='alert alert-danger'><strong>Error:</strong> <br /> " + response.message + "</div>");
+                        return false;
+                    }
+
+                    var data = response.data;
+                    if (data != null) {
+
+                        $(data).each(function () {
+                            var row = "";
+                            row += "<tr>";
+                            row += "<td>" + this.FileName + "</td>"; 
+                            row += "<td><a href='@Url.Content("~/DbContents/Tasks/Files/")" + this.FileName + "'  target='_blank'>download</a></td>";
+                            row += "</tr>";
+                            $(row).hide().appendTo("#files-list tbody").fadeIn(5000);
+                        });
+
+                        ResetForm(form);
+                        ShowToastMessage("Action", response.message, 5000);
+                    }
+
+                },
+                error: function (jqXHR, exception) {
+                    $(btn).html("<i class='fas fa-check nav-icon'></i> SAVE").removeAttr("disabled");
+                    alert(jqXHR.statusText);
+                }
+
+            });
+
+        }
+
+        return false;
+    }
+
+
+
+
+    </script>
+
+}

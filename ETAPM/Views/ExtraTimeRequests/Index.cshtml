@@ -1,0 +1,103 @@
+﻿@using ETAPM.Models
+@model ICollection<ExtraTimeRequest>
+@{
+    ViewBag.Title = "Dashboard";
+    ViewBag.PageNav = "<a class='page-nav' href='" + Url.Action("", "Dashboard") + "'>Dashboard</a><i class='page-nav-divider'></i><span class='page-nav-current'>EXTRA TIME REQUESTS</span>";
+
+    Layout = "~/Views/Shared/_layout.cshtml";
+
+}
+
+
+
+
+
+<div class="container-fluid mt-2">
+
+    <div class="form-row">
+        @foreach (ExtraTimeRequest request in Model)
+        {
+            <div class="form-group col-md-6">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between mb-0">
+                            <div>
+                                <span class="badge badge-warning">@request.Task.TaskStatus.TaskStatusName</span>
+                                <div class="form-label">@request.Task.Title</div>
+                            </div>
+
+
+                            <div class="dropdown">
+                                <div class="cursor-pointer" data-toggle="dropdown">
+                                    <i class="fas fa-chevron-circle-down"></i>
+                                </div>
+                                <div class="dropdown-menu dropdown-menu-right shadow">
+                                    <a class="dropdown-item" href="@Url.Action("Details","Tasks", new { id= request.Task.TaskId })"><i class="fas fa-info-circle nav-icon text-purple"></i> Details</a>
+                                    <a class="dropdown-item" href="#"><i class="fas fa-percentage nav-icon text-purple"></i> Update progress</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-control-label font-size-12 h-36-px">@request.Task.Description</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label mb-0">Requested time</label>
+                            <div class="display-4 mt-0">@request.Duration <span class="font-size-12">Minutes</span></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Message</label>
+                            <div class="form-control-label font-size-12 h-36-px">@request.Message</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group mb-0 col-sm-6">
+                                <label class="form-label">Remaining (Min): @request.Task.RemainingDuration/@request.Task.Duration </label>
+                            </div>
+                            <div class="form-group mb-0 col-sm-6 text-sm-right">
+                                <label class="form-label ">Completed: @request.Task.Progress% </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped" style="width:@request.Task.Progress%"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                @using (Html.BeginForm("AcceptExtraTimeRequest", "ExtraTimeRequests", FormMethod.Post, new { id = "NewExtraTimeRequest", onSubmit = "return NewExtraTimeRequest(this);" }))
+                                {
+                                    @Html.Hidden("ExtraTimeRequestId", request.ExtraTimeRequestId)
+
+                                    <button id="btnAccept" type="submit" class="btn form-control btn-warning">
+                                        <i class="fas fa-check nav-icon"></i> ACCEPT
+                                    </button>
+                                }
+                            </div>
+                            <div class="form-group col-md-3">
+                                @using (Html.BeginForm("RejectExtraTimeRequest", "Tasks", FormMethod.Post, new { id = "NewExtraTimeRequest", onSubmit = "return NewExtraTimeRequest(this);" }))
+                                {
+                                    @Html.Hidden("ExtraTimeRequestId", request.ExtraTimeRequestId)
+
+                                    <button id="btnAccept" type="submit" class="btn btn-secondary  form-control">
+                                        <i class="fas fa-times-circle nav-icon"></i> REJECT
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+
+</div>

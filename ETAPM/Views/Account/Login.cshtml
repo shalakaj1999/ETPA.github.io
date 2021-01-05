@@ -1,0 +1,81 @@
+﻿@model ETAPM.Models.SignIn
+
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>@ViewBag.Title - ETA PROJECT MANAGER</title>
+
+    <!-- Fonts-->
+    <link href="~/Fonts/GoogleRoboto/css/roboto.all.css" rel="stylesheet" />
+
+    <!-- Icon Fonts-->
+    <link href="~/Fonts/FontAwesome/css/fontawesome.all.min.css" rel="stylesheet" />
+
+    <!-- CSS -->
+    <link href="~/Content/CSS/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/login.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <div id="login-form-container" class="container">
+
+        <div>
+            <i class="fas fa-layer-group fa-3x text-blue-app"></i>
+        </div>
+        <h3 class="mt-2 mb-2 font-weight-bold text-blue-app">ETAPM</h3>
+        <h6>Empirical Time Analysis Project Manager</h6>
+        <div class="form-group">
+            <div id="msg" class="font-weight-bold text-danger">@ViewBag.Message</div>
+        </div>
+        @using (Html.BeginForm())
+        {
+            <div class="form-group text-center">
+                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger d-block" })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.Username, new { @class = "form-control txt", placeholder = "Enter email id (Username)" })
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control txt", placeholder = "Password" })
+            </div>
+            <div class="form-group text-center">
+                <div class="d-flex justify-content-center align-items-center ">
+                    @Html.CheckBoxFor(model => model.KeepMeLogin) <span class="font-weight-500 pl-1"> Keep me login </span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-12">
+                    <button class="btn form-control btn-warning">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </div> 
+            </div>
+
+        }
+
+
+    </div>
+
+
+    <!-- JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/popper.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.validate.custom.js"></script>
+    <script src="~/Scripts/wisdomls-dashboard.js"></script>
+
+</body>
+</html>

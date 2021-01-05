@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETAPM", "ETAPM\ETAPM.csproj", "{1462B9B4-6BF6-4043-A216-8207FEC6F5B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationMaker", "NotificationMaker\NotificationMaker.csproj", "{F209C04F-AF9B-4F5D-AC99-198501DCE9D0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1462B9B4-6BF6-4043-A216-8207FEC6F5B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1462B9B4-6BF6-4043-A216-8207FEC6F5B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1462B9B4-6BF6-4043-A216-8207FEC6F5B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1462B9B4-6BF6-4043-A216-8207FEC6F5B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F209C04F-AF9B-4F5D-AC99-198501DCE9D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F209C04F-AF9B-4F5D-AC99-198501DCE9D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F209C04F-AF9B-4F5D-AC99-198501DCE9D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F209C04F-AF9B-4F5D-AC99-198501DCE9D0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9395BD18-6509-4283-AAA5-D882B43227D0}
+	EndGlobalSection
+EndGlobal
